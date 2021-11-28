@@ -1,7 +1,7 @@
 import numpy as np
 import copy
 from TestFunc import TestFunc
-
+# Git deneme
 # GA sınıfı oluşturuluyor
 class GAO:
     # Default parametreler
