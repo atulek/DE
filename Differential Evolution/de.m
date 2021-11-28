@@ -42,21 +42,21 @@ pCR = 0.2;        % Crossover Probability
 
 %% Initialization
 
-empty_individual.Position = [];
-empty_individual.Cost = [];
+empty_individual.Position = [];					% boş birey pozisyon bilgisi
+empty_individual.Cost = [];					% boş birey maliyet bilgisi
 
-BestSol.Cost = inf;
+BestSol.Cost = inf;						% boş en iyi çözüm maliyet bilgisi
 
-pop = repmat(empty_individual, nPop, 1);
+pop = repmat(empty_individual, nPop, 1);			% boş bireyi popülasyon sayısı kadar çoğalt
 
-for i = 1:nPop
+for i = 1:nPop							% başlangıç popülasyonu oluştur
 
-    pop(i).Position = unifrnd(VarMin, VarMax, VarSize);
-    
-    pop(i).Cost = CostFunction(pop(i).Position);
-    
+    pop(i).Position = unifrnd(VarMin, VarMax, VarSize);		% her birey için pozisyonları min-max aralığında, 
+    								% problem boyutu kadar doldur	
+    pop(i).Cost = CostFunction(pop(i).Position);		% pozisyonları maliyet problemine gönder,
+    								% çözümleri Cost alanına kaydet
     if pop(i).Cost<BestSol.Cost
-        BestSol = pop(i);
+        BestSol = pop(i);					% en iyi çözümü (hem pozisyon hem maliyet) kaydet
     end
     
 end
@@ -65,26 +65,26 @@ BestCost = zeros(MaxIt, 1);
 
 %% DE Main Loop
 
-for it = 1:MaxIt
+for it = 1:MaxIt		% maksimum iterasyon sayısı kadar
     
-    for i = 1:nPop
+    for i = 1:nPop		% her birey için
         
-        x = pop(i).Position;
+        x = pop(i).Position;	% mevcut bireyin pozisyon bilgisini x'e kopyala
         
-        A = randperm(nPop);
+        A = randperm(nPop);	% nPop'a kadar olan sayıları rasgele üret (tekrarsız)
         
-        A(A == i) = [];
+        A(A == i) = [];		% mevcut bireyin seçilmemesi için o bireyi sil
         
-        a = A(1);
+        a = A(1);		% ilk üç bireyi (rasgele) a, b ve c ye aktar
         b = A(2);
         c = A(3);
         
         % Mutation
         %beta = unifrnd(beta_min, beta_max);
-        beta = unifrnd(beta_min, beta_max, VarSize);
-        y = pop(a).Position+beta.*(pop(b).Position-pop(c).Position);
-        y = max(y, VarMin);
-		y = min(y, VarMax);
+        beta = unifrnd(beta_min, beta_max, VarSize);			% betayı hesapla
+        y = pop(a).Position+beta.*(pop(b).Position-pop(c).Position);	% a + beta*(b-c) pozisyonları hesapla
+        y = max(y, VarMin);						% oluşan yeni pozisyonları min-max değerleri arasında tut
+	y = min(y, VarMax);
 		
         % Crossover
         z = zeros(size(x));
