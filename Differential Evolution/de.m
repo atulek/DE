@@ -87,24 +87,24 @@ for it = 1:MaxIt		% maksimum iterasyon sayısı kadar
 	y = min(y, VarMax);
 		
         % Crossover
-        z = zeros(size(x));
-        j0 = randi([1 numel(x)]);
+        z = zeros(size(x));				% problem boyutunda boş matris oluştur
+        j0 = randi([1 numel(x)]);			% 1 - nVar aralığında rasgele bir değer üret
         for j = 1:numel(x)
-            if j == j0 || rand <= pCR
-                z(j) = y(j);
-            else
-                z(j) = x(j);
+            if j == j0 || rand <= pCR			% Her bir pozisyonu kontrol et, çaprazlama oranından küçükse
+                z(j) = y(j);				% veya j0'a eşitse aday (y) bireyin genini al,
+            else					% değilse ebeveyn (x) bireyin genini al
+                z(j) = x(j);				% Böylece yeni çocuk (z) birey oluştur 
             end
         end
         
         NewSol.Position = z;
-        NewSol.Cost = CostFunction(NewSol.Position);
+        NewSol.Cost = CostFunction(NewSol.Position);	% çocuk bireyin maliyet fonksiyonun hesapla
         
-        if NewSol.Cost<pop(i).Cost
-            pop(i) = NewSol;
+        if NewSol.Cost<pop(i).Cost			% eğer çocuğun maliyeyi ebeveynden küçükse
+            pop(i) = NewSol;				% ebeveyni çocuk birey ile değiştir
             
-            if pop(i).Cost<BestSol.Cost
-               BestSol = pop(i);
+            if pop(i).Cost<BestSol.Cost			% yeni bireyin maliyeti önceki en iyi çözümden iyise
+               BestSol = pop(i);			% en iyi çözümü güncelle
             end
         end
         
